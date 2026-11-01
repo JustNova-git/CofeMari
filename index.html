@@ -220,10 +220,14 @@
 
         function renderDrinks(drinks) {
             const section = document.getElementById('drinks');
-            if (!drinks || !drinks.length) { section.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#8d6e63">Ничего не найдено</p>'; return }
+            if (!drinks || !drinks.length) {
+                section.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#8d6e63">Ничего не найдено</p>';
+                return
+            }
             section.innerHTML = drinks.map((d, i) => {
                 const catId = isSearchMode ? d._catId : currentCategory.id;
-                return `<div class="drink-card" data-cat="${catId}" data-idx="${i}"><h3>${d.name}</h3><div class="volume">${d.volume || d.sizes?.map(s => s.volume).join(' / ')}</div></div>`
+                const idx = isSearchMode ? d._idx : i; // ← ИСПРАВЛЕНИЕ: используем _idx при поиске
+                return `<div class="drink-card" data-cat="${catId}" data-idx="${idx}"><h3>${d.name}</h3><div class="volume">${d.volume || d.sizes?.map(s => s.volume).join(' / ')}</div></div>`
             }).join('');
             section.querySelectorAll('.drink-card').forEach(card => {
                 card.addEventListener('click', function () { openDrink(this.dataset.cat, this.dataset.idx) })
